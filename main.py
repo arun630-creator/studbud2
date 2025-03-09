@@ -119,24 +119,27 @@ if "study_plan" not in st.session_state:
 st.set_page_config(page_title="StudBud - AI Study Planner", layout="centered")
 
 # Custom CSS
+# Prevent Scrolling by Limiting Content Height
 st.markdown("""
-<style>
-    .centered {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .big-font {
-        font-size: 1.5rem !important;
-        margin-top: 2rem !important;
-    }
-    .auth-box {
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 2rem;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-    }
-</style>
+    <style>
+        /* Fix page layout to prevent scrolling */
+        .main .block-container {
+            max-width: 600px;
+            margin: auto;
+            padding-top: 50px;
+        }
+        /* Center text */
+        .centered-text {
+            text-align: center;
+        }
+        /* Increase button size */
+        .stButton>button {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px;
+            width: 100%;
+        }
+    </style>
 """, unsafe_allow_html=True)
 
 # Header Section (Always Visible)
@@ -146,24 +149,45 @@ st.subheader("AI-Powered Personalized Study Planner")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # Main Landing Page
-if not st.session_state.user_authenticated and st.session_state.auth_page == "main":
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        if st.button("Sign Up", use_container_width=True):
-            st.session_state.auth_page = "signup"
-            st.rerun()
 
-        if st.button("Login", use_container_width=True):
+if not st.session_state.user_authenticated and st.session_state.auth_page == "main":
+    # st.markdown("<h1 class='centered-text'>🎓 StudBud</h1>", unsafe_allow_html=True)
+    # st.markdown("<h3 class='centered-text'>AI-Powered Personalized Study Planner</h3>", unsafe_allow_html=True)
+    st.markdown("### 👤 Get Started", unsafe_allow_html=True)
+
+    # Create three equal-width columns for button alignment
+    col1, col2, col3 = st.columns([1, 1, 1])
+
+    with col1:
+        if st.button("🔑 Login"):
             st.session_state.auth_page = "login"
             st.rerun()
 
-    # Guest Access Button
-    st.markdown("<div class='centered big-font'>", unsafe_allow_html=True)
-    if st.button("Continue as Guest", key="guest_btn"):
-        st.session_state.user_authenticated = True
-        st.session_state.logged_in_user = "guest"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+    with col2:
+        if st.button("📝 Sign Up"):
+            st.session_state.auth_page = "signup"
+            st.rerun()
+
+    with col3:
+        if st.button("🚀 Continue as Guest"):
+            st.session_state.user_authenticated = True
+            st.session_state.logged_in_user = "guest"
+            st.rerun()
+
+    # Add spacing for better UI
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # Styling improvements
+    st.markdown("""
+    <style>
+        .stButton>button {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 
 # Authentication Pages
 elif not st.session_state.user_authenticated:
@@ -404,7 +428,115 @@ else:
                 mime="application/pdf"
             )
 # Footer
-st.markdown("---")
+st.markdown("""
+    <style>
+        /* Global Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        /* Center the main container */
+        .main .block-container {
+            max-width: 800px;
+            padding-top: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styled Buttons */
+        .stButton>button {
+            background: linear-gradient(135deg, #1fa2ff, #12d8fa, #a6ffcb);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .stButton>button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #12d8fa, #1fa2ff);
+        }
+
+        /* Styled Input Fields */
+        input[type="text"], input[type="password"], input[type="email"], textarea, select {
+            border-radius: 8px;
+            border: 2px solid #1fa2ff;
+            padding: 12px;
+            font-size: 16px;
+            width: 100%;
+            background: white;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #12d8fa;
+            box-shadow: 2px 2px 10px rgba(18, 216, 250, 0.5);
+            outline: none;
+        }
+
+        /* Styled Text Area */
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Styled Select Box */
+        select {
+            height: 45px;
+        }
+
+        /* Styled Expander */
+        details {
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #1fa2ff;
+            padding: 12px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styled Slider */
+        .stSlider .css-10trblm {
+            background: linear-gradient(135deg, #1fa2ff, #12d8fa);
+            border-radius: 10px;
+        }
+
+        /* Styled Sidebar */
+        .sidebar .block-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styled Checkboxes & Radio Buttons */
+        .stCheckbox label, .stRadio label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Footer Styling */
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
 st.markdown("""
 <style>
 .footer {
