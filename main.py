@@ -480,6 +480,7 @@ else:
 
     # Main Content - Display Selected History Plan
     # Main Content - Display Selected History Plan
+    # Main Content - Display Selected History Plan
     if st.session_state.get('selected_history_id'):
         history = get_user_history(st.session_state.logged_in_user)
         selected_entry = next(
@@ -488,24 +489,36 @@ else:
         )
 
         if selected_entry:
-            st.subheader(f"📚 Archived Plan - {selected_entry['timestamp']}")
+            st.subheader(f"📚 Archived Study Plan")
 
-            # Display key information using CORRECT KEYS
-            with st.container():
-                cols = st.columns([0.3, 0.7])
-                with cols[0]:
-                    st.write("**Topic:**")
-                    st.write("**Hours/Day:**")
-                    st.write("**Preferences:**")
-                with cols[1]:
-                    st.write(selected_entry['plan']['topic'])  # Changed from 'subjects'
-                    st.write(selected_entry['plan']['hours'])
-                    st.write(selected_entry['plan']['preferences'])
+            try:
+                # Get values with fallbacks
+                topic = selected_entry['plan'].get('topic', 'Unknown Topic')
+                hours = selected_entry['plan'].get('hours', 'Not specified')
+                preferences = selected_entry['plan'].get('preferences', 'No preferences recorded')
+                goals = selected_entry['plan'].get('goals', 'No goals specified')
 
-            st.markdown("---")
-            st.subheader("Study Plan Details")
-            st.write(selected_entry['plan']['plan'])  # The actual generated plan text
+                # Display information
+                with st.container():
+                    cols = st.columns([0.3, 0.7])
+                    with cols[0]:
+                        st.write("**Topic:**")
+                        st.write("**Hours/Day:**")
+                        st.write("**Preferences:**")
+                        st.write("**Goals:**")
+                    with cols[1]:
+                        st.write(topic)
+                        st.write(hours)
+                        st.write(preferences)
+                        st.write(goals)
 
+                st.markdown("---")
+                st.subheader("Study Plan Details")
+                st.write(selected_entry['plan'].get('plan', 'No plan content available'))
+
+            except KeyError as e:
+                st.error(f"Missing data in archived plan: {str(e)}")
+                st.write("Raw plan data:", selected_entry)
         # PDF Generation with Proper Bullet Points
         def create_pdf():
             try:
